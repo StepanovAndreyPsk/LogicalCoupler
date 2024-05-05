@@ -77,21 +77,6 @@ class LogicalCoupler(contributors: List<Contributor>) {
             }
         }
 
-//        for (entry in couplingScore.entries) {
-//            val contributorA = entry.key
-//            for (innerEntry in entry.value.entries) {
-//                val contributorB = innerEntry.key
-//                if (contributorB == contributorA)
-//                    continue
-//                val scoreAB = innerEntry.value
-//                val scoreBA = couplingScore[contributorB]?.get(contributorA) ?: 0
-//                val score = min(scoreAB, scoreBA)
-//                val contributorPair = ContributorPair(contributorB, contributorA, score)
-//                if (!contributorPairSet.contains(contributorPair)) {
-//                    contributorPairSet.add(contributorPair)
-//                }
-//            }
-//        }
         val result = contributorPairSet.toMutableList()
         result.sortDescending()
         require(count <= result.size) { "requested more pairs than present" }
