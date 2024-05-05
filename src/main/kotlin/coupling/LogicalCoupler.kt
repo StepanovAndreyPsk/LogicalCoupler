@@ -5,7 +5,7 @@ import fetcher.models.Contributor
 import fetcher.models.File
 import kotlin.math.min
 
-class LogicalCoupler(contributors: List<Contributor>) {
+class LogicalCoupler(contributors: List<Contributor>, private val outputLogs: Boolean = false) {
     private val couplingScore: MutableMap<Contributor, MutableMap<Contributor, Int>> = mutableMapOf()
     // coupling score [Bob][Alice] -- how many commits Alice made in the same file as Bob
 
@@ -39,6 +39,8 @@ class LogicalCoupler(contributors: List<Contributor>) {
             }
         }
     }
+
+    fun getFileToContributorsMap() = fileToContributionsMap.toMap()
 
     private fun calculateCouplingScore() {
         for (fileEntry in fileToContributionsMap.entries) {
