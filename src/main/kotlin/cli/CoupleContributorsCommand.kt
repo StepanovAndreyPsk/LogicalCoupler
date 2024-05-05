@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import kotlinx.coroutines.runBlocking
 import cli.styles.*
+import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.types.boolean
 import coupling.LogicalCoupler
 import coupling.LogicalCoupler.ContributorPair
@@ -19,14 +20,16 @@ class CoupleContributorsCommand: CliktCommand(
 {
     private val repositoryOwner: String by argument(help = "Repository owner")
     private val repositoryName: String by argument(help = "Repository name")
-    private val token: String by argument(help = "Github personal token")
+    private val token: String? by argument(help = "Github personal token").optional()
     private val count: Int by option(help="Number of contributor pairs to output (default 3)").int().default(3)
     private val details: Boolean by option(help="Output details while calculating coupling score").boolean().default(false)
     override fun run() {
         echo(progress("Calculating contributor pairs for repository: `$repositoryOwner/$repositoryName`"))
         runBlocking {
             val fetcher = RepositoryFetcher(repositoryOwner, repositoryName)
-            fetcher.addToken(token)
+            if (token != null) {
+                fetcher.addToken(token.toString())
+            }
             try {
                 val commitEntriesList = fetcher.listCommits()
                 val commitList = commitEntriesList.map { commitEntry -> fetcher.getCommitFullInfo(commitEntry.sha) }
